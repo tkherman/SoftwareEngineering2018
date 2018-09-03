@@ -13,11 +13,14 @@ public class Question3 {
 		
 		int max = 0;
 		int mirrorCount = 0;
+		// Loop through the two arrays and count the max 
+		// consecutive match
 		for (int i = 0; i < numbers.length; i++) {
 			if (numbers[i] == reversedNumbers[i]) {
 				mirrorCount++;
 				if (mirrorCount > max)
 					max = mirrorCount;
+			// reset mirrorCount if it's not continuous
 			} else {
 				mirrorCount = 0;
 			}
@@ -26,6 +29,7 @@ public class Question3 {
 		return max;
 	}
 	
+	// Clone the array and return a reversed version of it
 	private int[] getReversedArray(int[] arr) {
 		int[] reversedArray = arr.clone();
 		int start = 0, end = arr.length - 1;
