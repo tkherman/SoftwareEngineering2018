@@ -1,0 +1,11 @@
+To simulate the horse race, I used 5 different classes. 3 of the classes inherit from the Strategy interface which forces
+the 3 classes to implement the float getSpeedPercentage(int mile) function. Each of these classes adopt one of the race
+strategy: Early Sprint, Steady Run and Slow Start. This allows the run strategy logic to be separted from the Horse class.
+The Horse class keeps track of the strategy, max speed, distance run and the name. I chose to store distanceRun in the Horse
+class instead of the Race class because it made it simpler to the void run(int timePeriod) function to determine at what
+stage of the race the horse is at. Also, it avoids the need to keep track of that distance in the Race class. The Horse
+class has one main function void run(int timePeriod) which increments the distanceRun based on the strategy and will be
+called by the Race class. The Race class keeps track of the horses and is where the main loop occurs in. It has an 
+addHorse(Horse horse) that allow users to add Horses and the string startRace() function that starts the race and returns
+the winner. Overall, my design utilizes the Strategy pattern and use Race and Horse class to separate the logic behind the
+main loop and the advancement of each horses.
