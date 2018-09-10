@@ -36,10 +36,9 @@ public class HorseRaceTest {
 	@Test
 	public void raceTest() {
 		Race race = new Race();
-		race.addHorse(new Horse(RunStrategy.STEADYRUN_STRATEGY, 10, "winner"));
-		race.addHorse(new Horse(RunStrategy.STEADYRUN_STRATEGY, 8, "loser"));
+		race.addHorse(new Horse(RunStrategy.STEADYRUN_STRATEGY, 30, "winner"));
+		race.addHorse(new Horse(RunStrategy.STEADYRUN_STRATEGY, 25, "loser"));
 		String winner = race.startRace();
-		System.out.println(winner);
-		assert(winner == "winning");
+		assert(winner == "winner");
 	}
 }
