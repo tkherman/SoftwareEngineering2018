@@ -1,0 +1,32 @@
+Reflection
+
+See original code for all modification
+
+1.
+	For part 1 of the homework, not too much modifications were made. I added direction to
+the Train class so that the trains could move both East and West. In order to account for
+both trains, I also had to update the CrossingGate class to keep an eye on the locations
+of both trains. To do so, I used a set and assigned name to the trains. Instead of using
+just the x coordinate of 1 train, the set keeps track of what train are within the gate's
+trigger distance and adjust the gate's state accordingly.
+
+	For part 2 of the homework, it was quite a bit trickier. I had to make sure roads at each
+junction has the correct reference to the Road that the cars would go. Since CarFactory already
+have an ArrayList<Car> of cars on the road, I decided to continue use CarFactory to manage the
+"car list" in order to correctly manipulate observer and observable like linked-list. Once that
+was all set up, I began to manage the movement of cars. I introduced Direction into the class
+Car and had the move() method move the cars depending on the direction. Originally, the Car method()
+move is called in removeOffScreenCars() in CarFactory but I decided to move it to a new method
+called moveCars() that handle moving of cars because now we also have to handle changing
+direction and redirecting traffic. The moveCars() method contains all the logic that manages
+traffic. In addition, since CarFactory() is in charged of moving of the cars, I also had to
+add an instance of CarFactory to the "EastWest" road.
+
+	Overall, I thought this was a somewhat good approach without having to refactor too
+much of the original code. There are less ideal parts of the program because I feel that there
+are tighter coupling of classes that I wanted. E.g. CarFactory and Car.
+
+2.
+	I don't think that the car crossing East to West part isn't very scalable. The logic that
+handles the traffic is hard coded for each road which makes it difficult to add new crossing.
+However, the part with adding new trains should be scalable.
