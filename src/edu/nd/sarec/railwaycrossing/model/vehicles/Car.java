@@ -3,6 +3,7 @@ package edu.nd.sarec.railwaycrossing.model.vehicles;
 import java.util.Observable;
 import java.util.Observer;
 
+import edu.nd.sarec.railwaycrossing.model.infrastructure.Direction;
 import edu.nd.sarec.railwaycrossing.model.infrastructure.gate.CrossingGate;
 import edu.nd.sarec.railwaycrossing.view.CarImageSelector;
 import javafx.scene.Node;
@@ -21,15 +22,18 @@ public class Car extends Observable implements IVehicle, Observer{
 	private boolean gateDown = false;
 	private double leadCarY = -1;  // Current Y position of car directly infront of this one
 	private double speed = 0.5;
+	private double horizontalSpeed = 2;
+	private Direction direction;
 		
 	/**
 	 * Constructor
 	 * @param x initial x coordinate of car
 	 * @param y initial y coordinate of car
 	 */
-	public Car(int x, int y){
+	public Car(int x, int y, Direction dir){
 		this.currentX = x;
 		this.currentY = y;
+		this.direction = dir;
 		originalY = y;
 		ivCar = new ImageView(CarImageSelector.getImage());
 		ivCar.setX(getVehicleX());
@@ -53,21 +57,15 @@ public class Car extends Observable implements IVehicle, Observer{
 	}
 	
 	public void move(){
-		boolean canMove = true; 
-		
-		// First case.  Car is at the front of the stopping line.
-		if (gateDown && getVehicleY() < 430 && getVehicleY()> 390)
-			canMove = false;
-		
-		// Second case. Car is too close too other car.
-		if (leadCarY != -1  && getDistanceToLeadCar() < 50)
-			canMove = false;
-		
-		if (canMove){
-			currentY+=speed;
-			ivCar.setY(currentY);
-			setChanged();
-			notifyObservers();
+		switch (direction) {
+			case SOUTH:
+				moveSouth();
+				break;
+			case WEST:
+				moveWest();
+				break;
+			default:
+				break;
 		}
 	}
 	
@@ -97,6 +95,10 @@ public class Car extends Observable implements IVehicle, Observer{
 	public void removeLeadCar(){
 		leadCarY = -1;
 	}
+	
+	public void setDirection(Direction dir) {
+		this.direction = dir;
+	}
 
 	@Override
 	public void update(Observable o, Object arg1) {
@@ -115,4 +117,34 @@ public class Car extends Observable implements IVehicle, Observer{
 					
 		}				
 	}	
+	
+	private void moveSouth() {
+		boolean canMove = true; 
+		// First case.  Car is at the front of the stopping line.
+		if (gateDown && getVehicleY() < 430 && getVehicleY()> 390)
+			canMove = false;
+		
+		// Second case. Car is too close too other car.
+		if (leadCarY != -1  && getDistanceToLeadCar() < 50)
+			canMove = false;
+		
+		if (canMove){
+			currentY+=speed;
+			ivCar.setY(currentY);
+		}
+		setChanged();
+		notifyObservers();
+	}
+	
+	private void moveWest() {
+		if (currentY != 790) {
+			currentY = 790;
+			ivCar.setY(currentY);
+		}
+		currentX -= horizontalSpeed;
+		// make sure it doesn't go past Western road
+		if (currentX < 391)
+			currentX = 391;
+		ivCar.setX(currentX);
+	}
 }

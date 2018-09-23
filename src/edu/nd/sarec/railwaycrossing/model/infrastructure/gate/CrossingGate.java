@@ -1,10 +1,12 @@
 package edu.nd.sarec.railwaycrossing.model.infrastructure.gate;
 
+import java.util.HashSet;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Set;
 
+import edu.nd.sarec.railwaycrossing.model.infrastructure.Direction;
 import edu.nd.sarec.railwaycrossing.model.vehicles.Train;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
@@ -20,8 +22,9 @@ public class CrossingGate extends Observable implements Observer{
 	private int anchorY;
 	private int movingX;
 	private int movingY;
-	private int triggerPoint;
-	private int exitPoint;
+	private int eastTriggerPoint;
+	private int westTriggerPoint;
+	private Set<String> trainsInside;
 
 	private IGateState gateClosed;
 	private IGateState gateOpen;
@@ -29,7 +32,6 @@ public class CrossingGate extends Observable implements Observer{
 	private IGateState gateOpening;
 	private IGateState currentGateState;
 	private Line line; 
-	private Pane root;
 	
 	String gateName;
 	
@@ -40,8 +42,9 @@ public class CrossingGate extends Observable implements Observer{
 		anchorY = yPosition;
 		movingX = anchorX;
 		movingY = anchorY-60;
-		triggerPoint = anchorX+250;
-		exitPoint = anchorX-250;
+		eastTriggerPoint = anchorX+250;
+		westTriggerPoint = anchorX-250;
+		trainsInside = new HashSet<String>();
 		
 		// Gate elements
 		line = new Line(anchorX, anchorY,movingX,movingY);
@@ -119,11 +122,28 @@ public class CrossingGate extends Observable implements Observer{
 	public void update(Observable o, Object arg) {
 		if (o instanceof Train){
 			Train train = (Train)o;
-			if (train.getVehicleX() < exitPoint)
+			Direction trainDirection = train.getDirection();
+			switch (trainDirection) {
+				case WEST:
+					if(train.getVehicleX() < westTriggerPoint)
+						trainsInside.remove(train.getName());
+					else if (train.getVehicleX() < eastTriggerPoint)
+						trainsInside.add(train.getName());
+					break;
+				case EAST:
+					if (train.getVehicleX() > eastTriggerPoint)
+						trainsInside.remove(train.getName());
+					else if (train.getVehicleX() > westTriggerPoint)
+						trainsInside.add(train.getName());
+					break;
+				default:
+					break;
+			}
+			
+			if (trainsInside.size() == 0)
 				currentGateState.leaveStation();
-			else if(train.getVehicleX() < triggerPoint){
+			else if (trainsInside.size() > 0)
 				currentGateState.approachStation();
-			} 
 		}	
 	}
 }
