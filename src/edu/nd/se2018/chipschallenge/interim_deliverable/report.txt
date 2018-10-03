@@ -7,3 +7,5 @@ image rotating.
 
 After spending the time on design, I started creating the skeleton classes. I also created the basic javaFx application
 that currently simply reacts to user pressing ESC and it would escape the application. 
+
+I have attached the UML diagram as well as a screenshot showing the skeleton classes and the simple javaFX application
