@@ -1,0 +1,9 @@
+I spent most of the time designing the class diagram and really thinking through what to represent the game objects.
+Currently, my design involves having an abstract GameObj class and an abstract GameObjView class. Any object that isn't
+chip will inherit from the above which makes it easier for the gameMapBuilder class to keep track of the grid.
+I decided to have Chip class to not inherit from the two abstract class because it reacts to user input and I am
+planning on making it an Observable while having a ChipView class observing it so to isolate the logic of Chip's
+image rotating.
+
+After spending the time on design, I started creating the skeleton classes. I also created the basic javaFx application
+that currently simply reacts to user pressing ESC and it would escape the application. 
